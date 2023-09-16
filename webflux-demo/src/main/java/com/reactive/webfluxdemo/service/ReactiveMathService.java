@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.List;
 
 @Service
@@ -21,7 +22,8 @@ public class ReactiveMathService {
 
     public Flux<Response> getMultiplicationTable(Integer input) {
         return Flux.range(1, 10)
-                .doOnNext(i -> SleepUtil.sleepForSeconds(1))
+                .delayElements(Duration.ofSeconds(1)) /* This is a non-blocking call */
+                //.doOnNext(i -> SleepUtil.sleepForSeconds(1)) /* This is a blocking call */
                 .doOnNext(i -> logger.info("processing element: " + i))
                 .map(i -> new Response(i * input));
     }
