@@ -1,5 +1,6 @@
 package com.reactive.webfluxdemo.service;
 
+import com.reactive.webfluxdemo.dto.MultiplicationRequestDTO;
 import com.reactive.webfluxdemo.dto.Response;
 import com.reactive.webfluxdemo.util.SleepUtil;
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +16,7 @@ import java.util.List;
 public class ReactiveMathService {
 
     private static final Logger logger = LogManager.getLogger(ReactiveMathService.class);
+
     public Mono<Response> findSquare(Integer input) {
         return Mono.fromSupplier(() -> input * input)
                 .map(Response::new);
@@ -26,5 +28,11 @@ public class ReactiveMathService {
                 //.doOnNext(i -> SleepUtil.sleepForSeconds(1)) /* This is a blocking call */
                 .doOnNext(i -> logger.info("processing element: " + i))
                 .map(i -> new Response(i * input));
+    }
+
+    public Mono<Response> getProduct(Mono<MultiplicationRequestDTO> dtoMono) {
+        return dtoMono
+                .map(dto -> dto.getFirstNumber() * dto.getSecondNumber())
+                .map(Response::new);
     }
 }
