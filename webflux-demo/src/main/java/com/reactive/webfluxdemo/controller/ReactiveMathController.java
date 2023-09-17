@@ -5,6 +5,7 @@ import com.reactive.webfluxdemo.dto.Response;
 import com.reactive.webfluxdemo.service.ReactiveMathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -38,5 +39,22 @@ public class ReactiveMathController {
                                      @RequestHeader Map<String, String> headers) {
         System.out.println(headers);
         return mathService.getProduct(requestDTOMono);
+    }
+
+    @GetMapping("/cube/{input}/assignment")
+    public Mono<ResponseEntity<Response>> getCube(@PathVariable Integer input) {
+        if (input < 10 || input > 20) {
+            return Mono.just(ResponseEntity.badRequest().build());
+        }
+        return mathService.findCube(input).map(ResponseEntity::ok);
+    }
+
+    @GetMapping("/cube/{input}/solution")
+    public Mono<ResponseEntity<Response>> getCubeSolution(@PathVariable Integer input) {
+        return Mono.just(input)
+                .filter(i -> i > 10 && i < 20)
+                .flatMap(i -> mathService.findCube(i))
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.badRequest().build());
     }
 }

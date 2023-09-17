@@ -2,7 +2,6 @@ package com.reactive.webfluxdemo.service;
 
 import com.reactive.webfluxdemo.dto.MultiplicationRequestDTO;
 import com.reactive.webfluxdemo.dto.Response;
-import com.reactive.webfluxdemo.util.SleepUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
-import java.util.List;
 
 @Service
 public class ReactiveMathService {
@@ -33,6 +31,12 @@ public class ReactiveMathService {
     public Mono<Response> getProduct(Mono<MultiplicationRequestDTO> dtoMono) {
         return dtoMono
                 .map(dto -> dto.getFirstNumber() * dto.getSecondNumber())
+                .map(Response::new);
+    }
+
+    public Mono<Response> findCube(Integer input) {
+        return Mono
+                .fromSupplier(() -> input * input * input)
                 .map(Response::new);
     }
 }
