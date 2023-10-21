@@ -30,7 +30,7 @@ public class MathService {
      */
     public List<Response> getMultiplicationTable(Integer input) {
         return IntStream.rangeClosed(1, 10)
-                .peek(i -> SleepUtil.sleepForSeconds(1))
+                .peek(i -> SleepUtil.sleepForMilliseconds(200))
                 .peek(i -> logger.info("processing element : " + i))
                 .mapToObj(i -> new Response(input * i))
                 .collect(Collectors.toList());

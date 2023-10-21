@@ -9,4 +9,13 @@ public class SleepUtil {
         }
 
     }
+
+    public static void sleepForMilliseconds(Integer milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

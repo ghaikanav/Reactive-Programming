@@ -22,7 +22,7 @@ public class ReactiveMathService {
 
     public Flux<Response> getMultiplicationTable(Integer input) {
         return Flux.range(1, 10)
-                .delayElements(Duration.ofSeconds(1)) /* This is a non-blocking call */
+                .delayElements(Duration.ofMillis(200)) /* This is a non-blocking call */
                 //.doOnNext(i -> SleepUtil.sleepForSeconds(1)) /* This is a blocking call */
                 .doOnNext(i -> logger.info("processing element: " + i))
                 .map(i -> new Response(i * input));
